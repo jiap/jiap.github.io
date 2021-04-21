@@ -5,7 +5,7 @@ echo -n "请输入想要新建的博文名(注意不要有空格): -> "
 read newpost 
 
 file_name="$newpost"
-timestamp_hms=$(date "+%H-%M-%S")
+timestamp_hms=$(date "+%H:%M:%S")
 timestamp=$(date "+%Y-%m-%d")
 
 if [ -f "_posts/"$timestamp-$file_name".md" ];then
@@ -27,7 +27,7 @@ categories: []
 tags: []
 ---
 
-<img src='/assets/img/$timestamp-$file_name/xx.png' style='zoom:40%; margin: 0 auto; display: block;'/>"  > "_posts/"$timestamp-$file_name".md"
+<img src='/assets/img/$timestamp-$file_name/xx.png' style='zoom:40%; margin: 0 0; display: block;'/>"  > "_posts/"$timestamp-$file_name".md"
 			echo $timestamp-$file_name".md 文件已覆盖"
 			echo "删除文件夹 ..."	
 			rm -rf pics/$timestamp-$file_name/
@@ -47,7 +47,7 @@ categories: []
 tags: []
 ---
 
-<img src='/assets/img/$timestamp-$file_name-$timestamp_hms/[Replace Pic Name]' style='zoom:40%; margin: 0 auto; display: block;'/>"  > "_posts/"$timestamp-$file_name-$timestamp_hms".md"
+<img src='/assets/img/$timestamp-$file_name-$timestamp_hms/[Replace Pic Name]' style='zoom:40%; margin: 0 0; display: block;'/>"  > "_posts/"$timestamp-$file_name-$timestamp_hms".md"
 			echo $timestamp-$file_name-$timestamp_hms".md 文件已生成"	
 			echo "创建 "$timestamp-$file_name-$timestamp_hms "文件夹 ..."
 			mkdir assets/img/$timestamp-$file_name-$timestamp_hms/
@@ -71,7 +71,7 @@ categories: []
 tags: []
 ---
 
-<img src='/assets/img/$timestamp-$file_name/[Replace Pic Name]' style='zoom:40%; margin: 0 auto; display: block;'/>"  > "_posts/"$timestamp-$file_name".md"
+<img src='/assets/img/$timestamp-$file_name/[Replace Pic Name]' style='zoom:40%; margin: 0 0; display: block;'/>"  > "_posts/"$timestamp-$file_name".md"
   
   echo "新博文"$timestamp-$file_name".md 创建完成！"
   echo "在 /assets/img 文件夹下创建 "$timestamp-$file_name" 用来存放图片"
