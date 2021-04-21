@@ -2,7 +2,7 @@
 title: 配置多个 github 账号
 author: jiap
 date: 2021-02-18 
-categories: [Skills]
+categories: [Skills, Github]
 tags: [Github]
 ---
 
