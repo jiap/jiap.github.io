@@ -39,11 +39,11 @@ $ ssh-keygen -t rsa -C "jiap@hotmail.com"
 终端会提示输入 ssh 密钥名称，输入 `github_jiap` 就会生成 `github_jiap` 和 `github_jiap.pub` 两个文件。若直接按回车，则生成文件名默认为  `id_rsa` 和 `id_ras.pub`，其中 `.pub` 为公钥。
 
 
-<img src='/assets/img/2021-02-18-config-sevreal-github-accounts/new_rsa.png' style='zoom:80%; margin: 0 auto; display: block;'>
+<img src='/assets/img/2021-02-18-skill-config-sevreal-github-accounts/new_rsa.png' style='zoom:80%; margin: 0 auto; display: block;'>
 
 若在 `~/.ssh` 文件夹下已存在，则会提示是否覆盖，如下图箭头处所示。
 
-<img src='/assets/img/2021-02-18-config-sevreal-github-accounts/exist_rsa.png' style='zoom:80%; margin: 0 auto; display: block;'>
+<img src='/assets/img/2021-02-18-skill-config-sevreal-github-accounts/exist_rsa.png' style='zoom:80%; margin: 0 auto; display: block;'>
 
 这样就完成了两个 ssh key 的创建。
 
@@ -65,7 +65,7 @@ $ cat github_jiap.pub
 
 打开 github 网页，在设置- SSH & GPG keys 处设置，如下图所示：
 
-<img src='/assets/img/2021-02-18-config-sevreal-github-accounts/github_setting.png' style='zoom:60%; margin: 0 auto; display: block;'>
+<img src='/assets/img/2021-02-18-skill-config-sevreal-github-accounts/github_setting.png' style='zoom:60%; margin: 0 auto; display: block;'>
 
 点击 `New SSH key` 将之前在终端处得到的公钥粘贴保存即可。
 
@@ -128,7 +128,7 @@ $ ssh -T git@physicsay.github.com
 
 会有如下结果：
 
-<img src='/assets/img/2021-02-18-config-sevreal-github-accounts/ssh_t.png' style='zoom:60%; margin: 0 auto; display: block;'>
+<img src='/assets/img/2021-02-18-skill-config-sevreal-github-accounts/ssh_t.png' style='zoom:60%; margin: 0 auto; display: block;'>
 
 这里注意，会提示是否继续连接，输入 `yes` 即可，连接成功后会有提示。
 
@@ -147,7 +147,7 @@ subl .git/config
 
 将 `remote - url` 修改为在 `config` 中设置的即可，如下图所示。
 
-<img src='/assets/img/2021-02-18-config-sevreal-github-accounts/config.png' style='zoom:60%; margin: 0 auto; display: block;'>
+<img src='/assets/img/2021-02-18-skill-config-sevreal-github-accounts/config.png' style='zoom:60%; margin: 0 auto; display: block;'>
 /
 当然，也可以通过终端直接修改，进入该文件夹下，在终端输入： 
 ```bash
