@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><search><entry><title>制作一个 Github 的贡献图</title><url>https://jiap.github.io/post/2021-07-31-skill-calendar-heatmap/</url><categories><category>skills</category></categories><tags><tag>Tickles</tag></tags><content type="html"> 我们可以记录每日的锻炼、每日工作量、每天早起时间等，在年终总结时可以量化。关于贡献图有哪些比较好的呈现方式呢？折线图，柱状图等，这些图并没有给人“眼前一亮”的感觉，想到了 Github 的贡献图——根据算法把贡献量化。
 下图给出了记录步数的图[1]。
-{% asset_img example.png %} 下面分成两部分讲解如何制作贡献图 (Calendar-heatmap：日历热力图)：
+下面分成两部分讲解如何制作贡献图 (Calendar-heatmap：日历热力图)：
 1. 使用 pyecharts 库 使用 pyecharts 的库，在这个库中有日历热力图(Calendar)的介绍[2]。
 首先安装这个库，在终端输入
 $ python3 -m pip install pyecharts` 教程中给出的是如下代码：
@@ -12,24 +12,24 @@ import random import datetime import pyecharts.options as opts from pyecharts.ch
 安装 snapshot-phantomjs 库 $ python3 -m pip install snapshot-phantomjs 渲染成 png 图片 在 Python 文件中添加
 from snapshot_phantomjs import snapshot from pyecharts.render import make_snapshot make_snapshot(snapshot,"calendar_heatmap.html","calendar_heatmap.png") 3. 之后能做的事 在程序中的数据为模拟数据，那我们怎么记录自己的数据呢？可以建一个 csv 文档，然后读取数据。
 3.1 CSV 数据 和 读取 建立如下图所示的 CSV 文件(Excel 文件另存为为 CSV)，命名为 exercise.csv
-{% asset_img data.png %} exercise_data = [] with open('exercise.csv', mode='r', encoding='utf-8-sig') as csv_file: csv_reader = csv.reader(csv_file, delimiter=',') for row in csv_reader: ele = [row[0],int(row[1])] exercise_data.append(ele) 这里第一列 row[0] 为日期，第二列 row[1] 为真实数据，并添加到 exercise_data。之后再使用 pyecharts 库生成日历热力图。 当然还可以修改 colorbar 的颜色。
+exercise_data = [] with open('exercise.csv', mode='r', encoding='utf-8-sig') as csv_file: csv_reader = csv.reader(csv_file, delimiter=',') for row in csv_reader: ele = [row[0],int(row[1])] exercise_data.append(ele) 这里第一列 row[0] 为日期，第二列 row[1] 为真实数据，并添加到 exercise_data。之后再使用 pyecharts 库生成日历热力图。 当然还可以修改 colorbar 的颜色。
 3.2 修改 colorbar 的颜色 .set_global_opts( title_opts=opts.TitleOpts(title=title, pos_left='center'), visualmap_opts=opts.VisualMapOpts( max_=max, min_=0, range_color=['#f5f6f8','#417020'], orient="horizontal", is_piecewise=False ) ) 在 set_global_opts 中添加 range_color 字段，加上 colorbar 的颜色范围。
 Reference:
 yihong.run Calendar 将pyecharts生成的网页保存为图像格式的方法 Python - pyecharts：直接将图片保存为 png, pdf, gif 格式的文件</content></entry><entry><title>Geogebra 学习笔记 (1)</title><url>https://jiap.github.io/post/2021-04-21-skill-geogebra-learning-1/</url><categories><category>Skills</category><category>Geogebra</category></categories><tags><tag>Geogebra</tag><tag>Mathematics</tag><tag>Physics</tag></tags><content type="html"> 本文为 Geogebra 学习笔记，主要涉及：(1) 入门介绍；(2) 静态作图的使用技巧；(3) 动点动态图制作；(4) 滑动条的使用；(5) 进阶应用。
 本文使用的是 Geogebra Class 5.0，系统为 macOSX Big Sur。
 0. Geogebra 页面 打开 Geogebra 软件 (下文简称 ggb)，主页面如图 1 所示。
-{% asset_img layout.png %} 语言设置：在选项 - 语言 中选择中文； 页面布局设置：在视图-布局 中选择合适的页面布局，或 选中某区域直接进行拖拽到合适位置。 0.1 功能区 将光标悬停在功能区，会有功能提示。当右键时，会出现多功能，例如右击 【圆】，会出现几种画圆、圆弧的方法，如下图所示。
-{% asset_img unfold.png %} 0.2 代数区 当在功能区中选 点，在绘图区生成一个点，生成点的坐标会在代数区显示，如图所示。
-{% asset_img algebra_area.png %} 点击 功能区 第一个按钮，找到 移动，再在绘图区找到点，可直接移动； 如果直线和线段重合，无法选中某对象时，可在代数区 里选对应的点； 在绘图区右键该点，可设置该点的属性，包括颜色，形状等。 0.3 绘图区 绘图区有若干功能：显示/隐藏坐标轴，显示/隐藏网格，默认试图和吸附模式。
+语言设置：在选项 - 语言 中选择中文； 页面布局设置：在视图-布局 中选择合适的页面布局，或 选中某区域直接进行拖拽到合适位置。 0.1 功能区 将光标悬停在功能区，会有功能提示。当右键时，会出现多功能，例如右击 【圆】，会出现几种画圆、圆弧的方法，如下图所示。
+0.2 代数区 当在功能区中选 点，在绘图区生成一个点，生成点的坐标会在代数区显示，如图所示。
+点击 功能区 第一个按钮，找到 移动，再在绘图区找到点，可直接移动； 如果直线和线段重合，无法选中某对象时，可在代数区 里选对应的点； 在绘图区右键该点，可设置该点的属性，包括颜色，形状等。 0.3 绘图区 绘图区有若干功能：显示/隐藏坐标轴，显示/隐藏网格，默认试图和吸附模式。
 用 ggb 绘制的图形均在绘图区展示。
 在 Geogebra Class 6.0 中，绘图区可显示直角坐标轴、极坐标轴。
 1. Geogebra 制作原则 ggb 的制作原则：先做什么，后做什么。
 以作固定点的垂线为例：
-选择点工具，绘制一个点 $A$； 选择直线工具，在绘图区绘制一条直线 $f$； 选择垂线工具，会有提示“选定点与要垂直的线”，选 $A$ 以及 $f$，此时就完成了垂线的绘制。 {% asset_img perpendicular.png %} 2. Geogebra 小工具制作 在 ggb 中可以制作一些小工具，方便使用，以制作三角形的内接圆为例：
+选择点工具，绘制一个点 $A$； 选择直线工具，在绘图区绘制一条直线 $f$； 选择垂线工具，会有提示“选定点与要垂直的线”，选 $A$ 以及 $f$，此时就完成了垂线的绘制。 2. Geogebra 小工具制作 在 ggb 中可以制作一些小工具，方便使用，以制作三角形的内接圆为例：
 选择多边形工具，制作一个三角形 $ABC$； 由于内接圆为角平分线交点，在 垂线 工具下拉菜单中选择角平分线功能，会有提示“选择三个点或者两条线”； 注：这里点选 $A$、$B$、$C$ 三个点；若点选 $AB$、$BC$ 两条直线的话，会出现两条直线。
-绘制两条角平分线后，点选 描点 工具，在下拉菜单中找到 交点 功能，标记角平分线的交点 $D$。 点选 垂线 工具，过 $D$ 作 $AB$ 垂线，再选择 交点 工具，标记为 $E$。 点选 圆 工具，选择 “圆心与一点”，选择 $D$ 和 $E$，这样内切圆就绘制完成了。 {% asset_img methods.png %} 选择 Geogebra 的 工具 - 新建工具，对话框分成三部分，需要设置的为：输出对象 和 输入对象，在输出对象中选择 同心圆 e，在输入对象中选择三点$A$、$B$、$C$，再确定小工具名称即可 (可自定义)。
+绘制两条角平分线后，点选 描点 工具，在下拉菜单中找到 交点 功能，标记角平分线的交点 $D$。 点选 垂线 工具，过 $D$ 作 $AB$ 垂线，再选择 交点 工具，标记为 $E$。 点选 圆 工具，选择 “圆心与一点”，选择 $D$ 和 $E$，这样内切圆就绘制完成了。 选择 Geogebra 的 工具 - 新建工具，对话框分成三部分，需要设置的为：输出对象 和 输入对象，在输出对象中选择 同心圆 e，在输入对象中选择三点$A$、$B$、$C$，再确定小工具名称即可 (可自定义)。
 生成的文件为 .ggt 格式。
-{% asset_img tool.png %} 最实用的GGB（geogebra）入门课程</content></entry><entry><title>关于我</title><url>https://jiap.github.io/about.html</url><categories/><tags/><content type="html"> 个人介绍 物理教师, 半个程序员 (Python, Rails 还在路上), up主 (还没开始做), 感兴趣的领域 数学建模, 投资, 区块链技术 金融物理学, 应用数学, 维护的网站 jiaping.blog —— 个人博客 物理说 —— 一个专注高中物理的网站 vpython 中文站 —— 个人的翻译工作 竞赛 &amp; 学习 &amp; 项目 1. 美国初中生、高中生数学建模竞赛 2020: Honourable Mention * 1 (1H1S) 2021: Honourable Mention * 2 (2H) 2. Coursera 最近在刷课 ing&hellip; 3. 2021 年苏州市高新区十四五规划课题</content></entry><entry><title>文章专题</title><url>https://jiap.github.io/topic.html</url><categories/><tags/><content type="html"> under construction&hellip;</content></entry><entry><title>如何不靠运气变得富有(翻译)</title><url>https://jiap.github.io/post/2021-04-07-translation-naval-how-to-get-rich-0/</url><categories><category>Translation</category></categories><tags><tag>Translation</tag><tag>Naval</tag></tags><content type="html"> 如何不靠运气变得富有 How to Get Rich (without getting lucky)
+最实用的GGB（geogebra）入门课程</content></entry><entry><title>关于我</title><url>https://jiap.github.io/about.html</url><categories/><tags/><content type="html"> 个人介绍 物理教师, 半个程序员 (Python, Rails 还在路上), up主 (还没开始做), 感兴趣的领域 数学建模, 投资, 区块链技术 金融物理学, 应用数学, 维护的网站 jiaping.blog —— 个人博客 物理说 —— 一个专注高中物理的网站 vpython 中文站 —— 个人的翻译工作 竞赛 &amp; 学习 &amp; 项目 1. 美国初中生、高中生数学建模竞赛 2020: Honourable Mention * 1 (1H1S) 2021: Honourable Mention * 2 (2H) 2. Coursera 最近在刷课 ing&hellip; 3. 2021 年苏州市高新区十四五规划课题</content></entry><entry><title>文章专题</title><url>https://jiap.github.io/topic.html</url><categories/><tags/><content type="html"> under construction&hellip;</content></entry><entry><title>如何不靠运气变得富有(翻译)</title><url>https://jiap.github.io/post/2021-04-07-translation-naval-how-to-get-rich-0/</url><categories><category>Translation</category></categories><tags><tag>Translation</tag><tag>Naval</tag></tags><content type="html"> 如何不靠运气变得富有 How to Get Rich (without getting lucky)
 By. Naval Ravikant
 寻求财富，而不是金钱或地位。财富是拥有在你睡觉时能赚钱的资产。金钱是我们转移时间和财富的方式。地位是你所处的社会阶层。理解创造道德的财富是可能的。你若暗中轻视财富，财富也会远离你。忽略那些玩地位游戏的人，他们通过攻击那些玩财富创造游戏的人来获得地位。
 Seek wealth, not money or status. Wealth is having assets that earn while you sleep. Money is how we transfer time and wealth. Status is your place in the social hierarchy. Understand that ethical wealth creation is possible. If you secretly despise wealth, it will elude you. Ignore people playing status games. They gain status by attacking people playing wealth creation games.
