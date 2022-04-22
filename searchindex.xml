@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><search><entry><title>制作一个 Github 的贡献图</title><url>https://jiap.github.io/post/2021-07-31-skill-calendar-heatmap/</url><categories><category>skills</category></categories><tags><tag>Tickles</tag></tags><content type="html"> 我们可以记录每日的锻炼、每日工作量、每天早起时间等，在年终总结时可以量化。关于贡献图有哪些比较好的呈现方式呢？折线图，柱状图等，这些图并没有给人“眼前一亮”的感觉，想到了 Github 的贡献图——根据算法把贡献量化。
+下图给出了记录步数的图[1]。
+{% asset_img example.png %} 下面分成两部分讲解如何制作贡献图 (Calendar-heatmap：日历热力图)：
+1. 使用 pyecharts 库 使用 pyecharts 的库，在这个库中有日历热力图(Calendar)的介绍[2]。
+首先安装这个库，在终端输入
+$ python3 -m pip install pyecharts` 教程中给出的是如下代码：
+import random import datetime import pyecharts.options as opts from pyecharts.charts import Calendar begin = datetime.date(2017, 1, 1) end = datetime.date(2017, 12, 31) data = [ [str(begin + datetime.timedelta(days=i)), random.randint(1000, 25000)] for i in range((end - begin).days + 1) ] ( Calendar(init_opts=opts.InitOpts(width="1600px", height="1000px")) .add( series_name="", yaxis_data=data, calendar_opts=opts.CalendarOpts( pos_top="120", pos_left="30", pos_right="30", range_="2017", yearlabel_opts=opts.CalendarYearLabelOpts(is_show=False), ), ) .set_global_opts( title_opts=opts.TitleOpts(pos_top="30", pos_left="center", title="2017年步数情况"), visualmap_opts=opts.VisualMapOpts( max_=20000, min_=500, orient="horizontal", is_piecewise=False ), ) .render("calendar_heatmap.html") ) 运行以上 Python 程序，会在该文件夹下渲染出一个 calendar_heatmap.html 的网页文件，即为日历热力图。
+程序中的 data 是一个 List，包含了 2017 年所有的 [日期, 随机数] 的数组元素。 之后调用 pyecharts 库中的 Calendar 模块，设置热力图的宽度width和高度height，将产生的随机数组 data 赋值给 yaxis_data，在 calendar_opts 中的参数修改热力图的位置。 set_global_opts 中可以调整热力图的名称、colorbar 的起始数值、横纵放置 以及 是否离散。 2. 生成 PNG 图片 现在得到了 calendar_heatmap.html 的网页文件，如果将其放在文章中，可以渲染成图片。这要如何做呢？
+2.1 不太有效的方法(踩坑) 网上找到了如何将 html 文件渲染成 png 的方式：
+安装phantomjs: $ npm install -g phantomjs-prebuilt 安装pyecharts-snapshost: $ python3 -m pip install pyecharts-snapshot 保存图片 在 python 程序中，添加： from pyecharts_snapshot.main import make_a_snapshot make_a_snapshot('calendar_heatmap.html', 'calendar_heatmap.png') 但这样做会出bug，查阅了资料：发现问题出在python版本上，据pyecharts (github社区中明确表示上述方法不支持python3.6 3.7等版本。可以使用 snapshot-phantomjs 替代[3-4]。
+2.2 可用的方法 根据资料[3-4] 可以使用 snapshot-phantomjs 将 html 文件渲染成 png 文件。
+安装 snapshot-phantomjs 库 $ python3 -m pip install snapshot-phantomjs 渲染成 png 图片 在 Python 文件中添加
+from snapshot_phantomjs import snapshot from pyecharts.render import make_snapshot make_snapshot(snapshot,"calendar_heatmap.html","calendar_heatmap.png") 3. 之后能做的事 在程序中的数据为模拟数据，那我们怎么记录自己的数据呢？可以建一个 csv 文档，然后读取数据。
+3.1 CSV 数据 和 读取 建立如下图所示的 CSV 文件(Excel 文件另存为为 CSV)，命名为 exercise.csv
+{% asset_img data.png %} exercise_data = [] with open('exercise.csv', mode='r', encoding='utf-8-sig') as csv_file: csv_reader = csv.reader(csv_file, delimiter=',') for row in csv_reader: ele = [row[0],int(row[1])] exercise_data.append(ele) 这里第一列 row[0] 为日期，第二列 row[1] 为真实数据，并添加到 exercise_data。之后再使用 pyecharts 库生成日历热力图。 当然还可以修改 colorbar 的颜色。
+3.2 修改 colorbar 的颜色 .set_global_opts( title_opts=opts.TitleOpts(title=title, pos_left='center'), visualmap_opts=opts.VisualMapOpts( max_=max, min_=0, range_color=['#f5f6f8','#417020'], orient="horizontal", is_piecewise=False ) ) 在 set_global_opts 中添加 range_color 字段，加上 colorbar 的颜色范围。
+Reference:
+yihong.run Calendar 将pyecharts生成的网页保存为图像格式的方法 Python - pyecharts：直接将图片保存为 png, pdf, gif 格式的文件</content></entry><entry><title>Geogebra 学习笔记 (1)</title><url>https://jiap.github.io/post/2021-04-21-skill-geogebra-learning-1/</url><categories><category>Skills</category><category>Geogebra</category></categories><tags><tag>Geogebra</tag><tag>Mathematics</tag><tag>Physics</tag></tags><content type="html"> 本文为 Geogebra 学习笔记，主要涉及：(1) 入门介绍；(2) 静态作图的使用技巧；(3) 动点动态图制作；(4) 滑动条的使用；(5) 进阶应用。
+本文使用的是 Geogebra Class 5.0，系统为 macOSX Big Sur。
+0. Geogebra 页面 打开 Geogebra 软件 (下文简称 ggb)，主页面如图 1 所示。
+{% asset_img layout.png %} 语言设置：在选项 - 语言 中选择中文； 页面布局设置：在视图-布局 中选择合适的页面布局，或 选中某区域直接进行拖拽到合适位置。 0.1 功能区 将光标悬停在功能区，会有功能提示。当右键时，会出现多功能，例如右击 【圆】，会出现几种画圆、圆弧的方法，如下图所示。
+{% asset_img unfold.png %} 0.2 代数区 当在功能区中选 点，在绘图区生成一个点，生成点的坐标会在代数区显示，如图所示。
+{% asset_img algebra_area.png %} 点击 功能区 第一个按钮，找到 移动，再在绘图区找到点，可直接移动； 如果直线和线段重合，无法选中某对象时，可在代数区 里选对应的点； 在绘图区右键该点，可设置该点的属性，包括颜色，形状等。 0.3 绘图区 绘图区有若干功能：显示/隐藏坐标轴，显示/隐藏网格，默认试图和吸附模式。
+用 ggb 绘制的图形均在绘图区展示。
+在 Geogebra Class 6.0 中，绘图区可显示直角坐标轴、极坐标轴。
+1. Geogebra 制作原则 ggb 的制作原则：先做什么，后做什么。
+以作固定点的垂线为例：
+选择点工具，绘制一个点 $A$； 选择直线工具，在绘图区绘制一条直线 $f$； 选择垂线工具，会有提示“选定点与要垂直的线”，选 $A$ 以及 $f$，此时就完成了垂线的绘制。 {% asset_img perpendicular.png %} 2. Geogebra 小工具制作 在 ggb 中可以制作一些小工具，方便使用，以制作三角形的内接圆为例：
+选择多边形工具，制作一个三角形 $ABC$； 由于内接圆为角平分线交点，在 垂线 工具下拉菜单中选择角平分线功能，会有提示“选择三个点或者两条线”； 注：这里点选 $A$、$B$、$C$ 三个点；若点选 $AB$、$BC$ 两条直线的话，会出现两条直线。
+绘制两条角平分线后，点选 描点 工具，在下拉菜单中找到 交点 功能，标记角平分线的交点 $D$。 点选 垂线 工具，过 $D$ 作 $AB$ 垂线，再选择 交点 工具，标记为 $E$。 点选 圆 工具，选择 “圆心与一点”，选择 $D$ 和 $E$，这样内切圆就绘制完成了。 {% asset_img methods.png %} 选择 Geogebra 的 工具 - 新建工具，对话框分成三部分，需要设置的为：输出对象 和 输入对象，在输出对象中选择 同心圆 e，在输入对象中选择三点$A$、$B$、$C$，再确定小工具名称即可 (可自定义)。
+生成的文件为 .ggt 格式。
+{% asset_img tool.png %} 最实用的GGB（geogebra）入门课程</content></entry><entry><title>关于我</title><url>https://jiap.github.io/about.html</url><categories/><tags/><content type="html"> 个人介绍 物理教师, 半个程序员 (Python, Rails 还在路上), up主 (还没开始做), 感兴趣的领域 数学建模, 投资, 区块链技术 金融物理学, 应用数学, 维护的网站 jiaping.blog —— 个人博客 物理说 —— 一个专注高中物理的网站 vpython 中文站 —— 个人的翻译工作 竞赛 &amp; 学习 &amp; 项目 1. 美国初中生、高中生数学建模竞赛 2020: Honourable Mention * 1 (1H1S) 2021: Honourable Mention * 2 (2H) 2. Coursera 最近在刷课 ing&hellip; 3. 苏州市高新区十四五规划课题</content></entry><entry><title>文章专题</title><url>https://jiap.github.io/topic.html</url><categories/><tags/><content type="html"> under construction&hellip;</content></entry><entry><title>如何不靠运气变得富有(翻译)</title><url>https://jiap.github.io/post/2021-04-07-translation-naval-how-to-get-rich-0/</url><categories><category>Translation</category></categories><tags><tag>Translation</tag><tag>Naval</tag></tags><content type="html"> 如何不靠运气变得富有 How to Get Rich (without getting lucky)
+By. Naval Ravikant
+寻求财富，而不是金钱或地位。财富是拥有在你睡觉时能赚钱的资产。金钱是我们转移时间和财富的方式。地位是你所处的社会阶层。理解创造道德的财富是可能的。你若暗中轻视财富，财富也会远离你。忽略那些玩地位游戏的人，他们通过攻击那些玩财富创造游戏的人来获得地位。
+Seek wealth, not money or status. Wealth is having assets that earn while you sleep. Money is how we transfer time and wealth. Status is your place in the social hierarchy. Understand that ethical wealth creation is possible. If you secretly despise wealth, it will elude you. Ignore people playing status games. They gain status by attacking people playing wealth creation games.
+出租你的时间不会让你变的富有。你必须拥有股权 (企业的一部分) 来获得财富自由。你可以提供社会想要但不知如何大规模获取的东西而致富。选择一个能和“长期的人”玩“长期游戏”的行业。互联网极大地扩展了职业发展的可能空间，但绝大多数人没有意识到这一点。
+You’re not going to get rich renting out your time. You must own equity - a piece of a business - to gain your financial freedom. You will get rich by giving society what it wants but does not yet know how to get. At scale. Pick an industry where you can play long term games with long term people. The Internet has massively broadened the possible space of careers. Most people haven&rsquo;t figured this out yet.
+玩迭代游戏。无论是财富、人际关系还是知识，生活中的所有回报都来自于复利。选择高智商、精力充沛，以及诚实高于所有其他因素的人成为商业伙伴。不要与愤世嫉俗者和悲观者为伍——他们信奉自我实现。学会销售和构建，如果两个你都能做，你将势不可挡。
+Play iterated games. All the returns in life, whether in wealth, relationships, or knowledge, come from compound interest. Pick business partners with high intelligence, energy, and, above all, integrity. Don&rsquo;t partner with cynics and pessimists. Their beliefs are self-fulfilling. Learn to sell. Learn to build. If you can do both, you will be unstoppable.
+用特定知识、责任感和影响力武装自己。特定知识是你不能通过培训获得的知识。如果社会能够培训你，那也能培训别人，然后替代你。特定知识是通过追寻你真正的好奇心和激情，而不是当下热点而获得的。构建特定知识对你来说就像玩一样，但对别人而言就像是工作。特定知识的传授是通过学徒制，而不是在学校。特定知识往往是高度技术性或创造性的，不能被外包或自动化。
+Arm yourself with specific knowledge, accountability, and leverage. Specific knowledge is knowledge that you cannot be trained for. If society can train you, it can train someone else, and replace you. Specific knowledge is found by pursuing your genuine curiosity and passion rather than whatever is hot right now. Building specific knowledge will feel like play to you but will look like work to others. When specific knowledge is taught, it’s through apprenticeships, not schools. Specific knowledge is often highly technical or creative. It cannot be outsourced or automated.
+勇于承担责任，以自己名义承担商业风险，社会会以责任、股权和影响力来回报你。最靠得住的人有独特的、公开的和冒险性的个人品质：奥普拉(Oprah)、特朗普(Trump)、坎耶(Kanye)、埃隆(Elon)。
+Embrace accountability, and take business risks under your own name. Society will reward you with responsibility, equity, and leverage. The most accountable people have singular, public, and risky brands: Oprah, Trump, Kanye, Elon.
+“给我一根足够长的杠杆和一个立足点，我就可以撬动地球”——阿基米德。财富需要杠杆。商业杠杆来源于资本、人脉和边际成本为零的可复制产品 (程序代码和媒体媒体) 。资本意味着金钱。运用你的专业知识、责任心，并展示出良好的判断力来募集资金。劳动力是为你工作的人，这是最古老和最具争议的杠杆形式。劳动力杠杆会影响你的父母，但不要浪费你的生命来去追逐。资本和劳动力是有门槛的杠杆形式。每个人都在追逐资本，但总得有人给你；每个人都试图领导，但总得有人跟随你。代码和媒体是门槛低的杠杆形式。他们是新兴富豪们背后的杠杆。你创造的软件和媒体内容在你睡觉的时候仍能为你工作。一大群机器 (*服务器) 可以免费使用 — — 它只是因为需要散热和太占地方而被放在数据中心，把它们用起来。如果你不会写代码，那就写书和博客，录视频和播客吧。杠杆是你判断力的强制放大器。判断力需要经验，但可以通过学习基础技能而快速构建。
+“Give me a lever long enough, and a place to stand, and I will move the earth.” - Archimedes. Fortunes require leverage. Business leverage comes from capital, people, and products with no marginal cost of replication (code and media). Capital means money. To raise money, apply your specific knowledge, with accountability, and show resulting good judgment. Labor means people working for you. It&rsquo;s the oldest and most fought-over form of leverage. Labor leverage will impress your parents, but don’t waste your life chasing it. Capital and labor are permissioned leverage. Everyone is chasing capital, but someone has to give it to you. Everyone is trying to lead, but someone has to follow you. Code and media are permissionless leverage. They&rsquo;re the leverage behind the newly rich. You can create software and media that works for you while you sleep. An army of robots is freely available - it&rsquo;s just packed in data centers for heat and space efficiency. Use it. If you can&rsquo;t code, write books and blogs, record videos and podcasts. Leverage is a force multiplier for your judgement. Judgement requires experience, but can be built faster by learning foundational skills.
+没有所谓的”商业“技能，远离商业杂志和商业课程。学习微观经济学、博弈论、心理学、说服力、伦理学、数学和计算机。读比听快，做比看快。
+There is no skill called “business.” Avoid business magazines and business classes. Study microeconomics, game theory, psychology, persuasion, ethics, mathematics, and computers. Reading is faster than listening. Doing is faster than watching.
+你应该忙得没时间“喝咖啡”(*与朋友会面)，但仍然能够保持着完整的日程表。设置并实施一个理想的个人时薪。如果解决一个问题能够剩下的费小于你的时薪，忽略它。如果外包项目的成本低于你的时薪，那就把它外包出去！尽可能努力地工作，即使与你共事的人和工作内容都比你努力工作更加重要。在你所做的事情上做到全世界世界最好。持续重新定义你所做的事直到事实正确。
+You should be too busy to “do coffee," while still keeping an uncluttered calendar. Set and enforce an aspirational personal hourly rate. If fixing a problem will save less than your hourly rate, ignore it. If outsourcing a task will cost less than your hourly rate, outsource it. Work as hard as you can. Even though who you work with and what you work on are more important than how hard you work. Become the best in the world at what you do. Keep redefining what you do until this is true.
+没有快速致富的方案，那只不过是别人从你这变富罢了。将特定知识以杠杆的方式运用，最后你会得到你应得的。当你最终变得富有，你会意识到这不是你最初寻求的了，但这以后再说。
+There are no get rich quick schemes. That&rsquo;s just someone else getting rich off you. Apply specific knowledge, with leverage, and eventually you will get what you deserve. When you&rsquo;re finally wealthy, you&rsquo;ll realize that it wasn&rsquo;t what you were seeking in the first place. But that&rsquo;s for another day.
+参考：
+Naval Twitter 《硅谷思想家 Naval Ravikant分享，如何不考运气致富！》 《如何(不靠运气)变得富有 — — 来自AngelList创办人的经验》 注：
+原 Twitter 是分散的，为方便阅读将某几条合并翻译； 括号中(*)内容为译者注。 Logs：
+2021-04-06：迁移
+2019-05-26：翻译
+2019-05-13：创建</content></entry><entry><title>配置多个 github 账号</title><url>https://jiap.github.io/post/2021-02-18-skill-config-sevreal-github-accounts/</url><categories><category>skills</category></categories><tags><tag>skills</tag><tag>github</tag></tags><content type="html"> 一般人使用 github 只用一个账号，但对于开发人员而言，会涉及到不同的 github 账号，那一台电脑如何连接两个 github 账号呢？本文记录了多个 github 是如何配置的。
+本文使用两个 github 账号为 jiap 和 physicsay。使用的 ssh key 仅为文章所用。
+本文基于 OSX Big Sur。
+0. 预备知识 Secure Shell (SSH) 是一个允许两台电脑之间通过安全的连接进行数据交换的网络协议。通过加密保证了数据的保密性和完整性。SSH采用公钥加密技术来验证远程主机，以及(必要时)允许远程主机验证用户。
+配置 github 的 SSH keys 可以方便登陆到 github 服务器，无需输入密码。具体方法为：在本地电脑生成 SSH key (包含公钥和密钥)，再在 github 中配置上生成的公钥，这样就可以在本地无密码登陆 github 了。
+1. 创建 ssh key 打开终端 (Terminal)，输入以下语句，该语句是列出 ~/.ssh 文件夹下有哪些文件，~/.ssh 是存放 ssh 连接配置的文件夹。
+$ ls ~/.ssh $ cd ~/.ssh 终端中代码均以 $ 开始，实际运行不需要输入。
+如果 ~/.ssh 下有 id_rsa(私钥) 和 id_rsa.pub (公钥)，说明之前已生成过 SSH key 了，第二行语句是进入 ~/.ssh 文件夹。
+在终端输入
+$ ssh-keygen -t rsa -C "jiap@hotmail.com" 终端会提示输入 ssh 密钥名称，输入 github_jiap 就会生成 github_jiap 和 github_jiap.pub 两个文件。若直接按回车，则生成文件名默认为 id_rsa 和 id_ras.pub，其中 .pub 为公钥。
+若在 ~/.ssh 文件夹下已存在，则会提示是否覆盖，如下图箭头处所示。
+这样就完成了两个 ssh key 的创建。
+如果不想输入密钥名称，可以使用以下语句，也会生成两个密钥文件。
+$ ssh-keygen -t rsa -C "physicsay@outlook.com" -f "physicsay_github" 2. 在 github 添加公钥 在终端输入以下命令，输出公钥内容，并复制：
+$ cat github_jiap.pub 打开 github 网页，在设置- SSH &amp; GPG keys 处设置，如下图所示：
+点击 New SSH key 将之前在终端处得到的公钥粘贴保存即可。
+同样的方式，添加第二个 github 账号的公钥。
+3. 使用 ssh-agent 注册新的 SSH 密钥 ssh-agent：是一个可以控制和保存公钥身份验证所使用的私钥的程序。如果没有正在运行的 ssh-agent，在终端执行以下代码，以确保 ssh-agent 运行。
+$ eval "$(ssh-agent -s)" 再使用 ssh-add 添加私钥：
+$ ssh-add ~/.ssh/github_jiap $ ssh-add ~/.ssh/github_physicsay 输入 $ ssh-add -l 可查看现有的私钥；输入 $ ssh-add -D 可在验证程序中删掉所有的密钥(原密钥不会删除，只删除验证程序 ssh-add 中的密钥)。
+4. 设置配置文件 在终端新建 config 文件，并进行配置
+$ touch config 在 config 中编辑以下内容
+# github: jiap, email: jiap@hotmail.com Host jiap.github.com HostName github.com User git IdentityFile ~/.ssh/github_jiap # github: physicsay, email: physicsay@outlook.com Host physicsay.github.com HostName github.com User git IdentityFile ~/.ssh/github_physicsay Host: 别名，用于区分多个 git 账号，填写的是 jiap.github.com； HostName: 填写的是 github.com； IdentityFile: ssh 连接使用的私钥； 规则就是：从上至下读取 config 的内容，在每个 Host 下寻找对应的私钥，可以根据需要添加更多的 github 账号。
+5. 测试连接性 在终端输入以下语句，测试 ssh 的连接是否成功：
+$ ssh -T git@jiap.github.com $ ssh -T git@physicsay.github.com 会有如下结果：
+这里注意，会提示是否继续连接，输入 yes 即可，连接成功后会有提示。
+此时会在 ~/.ssh 文件夹下生成一个新的 known_host 文件。
+6. clone 项目 这里分成几种情况，最简单的是将自己 github 的仓库 clone 到本地，进入该文件夹后，并在终端输入 $ git remote -v 查看 URL。打开 .git/config 文件 (注意 .git 是一个隐藏文件夹。)
+如果使用了 sublime 编辑器的话，直接在终端输入：
+subl .git/config 将 remote - url 修改为在 config 中设置的即可，如下图所示。
+当然，也可以通过终端直接修改，进入该文件夹下，在终端输入：
+$ git remote set-url origin git@physicsay.github.com:physicsay/physicsay.github.io.git 这里只需要将上述语句中的 physicsay 全部替换为自己的 github 账户名。 修改时，需要确认本地文件夹所属的 github 账号，不要混淆。 这个内容很多人都写过，在学习过程中，尤其是 config 文件的设置比较难以理解，就有了这篇文章。
+参考：
+SSH key的介绍与在Git中的使用 Git在同一机器下配置多个github账号 Git多用户，不同项目配置不同Git账号 同一客户端下使用多个git账号</content></entry></search>
